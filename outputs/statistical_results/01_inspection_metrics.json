@@ -1,0 +1,52 @@
+{
+  "csv_file": "data/raw/collisions_2025.csv",
+  "csv_size_bytes": 19349153,
+  "csv_encoding": "UTF-8 (no BOM)",
+  "crlf_line_endings": false,
+  "guide_file": "data/reference/data_guide_2025.xlsx",
+  "guide_sheets": {
+    "2024_code_list": [
+      1825,
+      5
+    ],
+    "2011_to_2024_conversion": [
+      102,
+      7
+    ]
+  },
+  "rows": 101525,
+  "columns": 44,
+  "dtype_counts": {
+    "int64": 30,
+    "str": 8,
+    "float64": 6
+  },
+  "collision_year_values": [
+    2025
+  ],
+  "columns_renamed_in_guide": {
+    "enhanced_severity_collision": "enhanced_collision_severity",
+    "collision_adjusted_severity_serious": "collision_adjusted_serious",
+    "collision_adjusted_severity_slight": "collision_adjusted_slight"
+  },
+  "columns_not_in_guide": [],
+  "columns_with_nan": [
+    {
+      "column": "location_easting_osgr",
+      "n_missing_nan": 2
+    },
+    {
+      "column": "location_northing_osgr",
+      "n_missing_nan": 2
+    },
+    {
+      "column": "longitude",
+      "n_missing_nan": 2
+    },
+    {
+      "column": "latitude",
+      "n_missing_nan": 2
+    }
+  ],
+  "coded_fields_with_codes_outside_guide": []
+}

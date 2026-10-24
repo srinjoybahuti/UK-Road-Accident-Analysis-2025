@@ -1,0 +1,25 @@
+column,n_nan,n_minus_one,pct_missing,interpretation,handling
+local_authority_district,0,101525,100.0,Field empty for the whole 2025 file,Column dropped
+junction_detail_historic,0,87871,86.55,Structural (field not collected under the 2024 specification),Retained as raw codes; not used in analysis
+special_conditions_at_site,0,87858,86.54,Structural (field not collected under the 2024 specification),Retained as raw codes; not used in analysis
+pedestrian_crossing_physical_facilities_historic,0,87851,86.53,Structural (field not collected under the 2024 specification),Retained as raw codes; not used in analysis
+pedestrian_crossing_human_control_historic,0,87852,86.53,Structural (field not collected under the 2024 specification),Retained as raw codes; not used in analysis
+carriageway_hazards_historic,0,87852,86.53,Structural (field not collected under the 2024 specification),Retained as raw codes; not used in analysis
+junction_control,0,44487,43.82,"Mostly structural (not at a junction, coded -1 instead of 0)",Recoded to 'Not at junction...' where junction_detail = 0; otherwise NaN
+second_road_number,0,25105,24.73,"Mostly structural (-1 whenever second_road_class is 0 = no second road, or itself missing/unknown)",Set to NaN
+enhanced_severity_collision,0,13677,13.47,Structural (only for injury-based reporting),Label = NaN; cleaned copy `enhanced_severity_collision_clean`
+trunk_road_flag,0,7108,7.0,Mostly structural (Police Scotland),Label = NaN
+junction_detail,0,6701,6.6,Genuine missing/out of range,Label = NaN
+pedestrian_crossing,0,6527,6.43,Genuine missing/out of range,Label = NaN
+carriageway_hazards,0,5346,5.27,Genuine missing/out of range,Label = NaN
+lsoa_of_accident_location,0,4107,4.05,Structural (England/Wales only),Set to NaN
+road_surface_conditions,0,634,0.62,Genuine missing/out of range,Label = NaN; rows kept; excluded from surface-specific summaries
+second_road_class,0,171,0.17,Genuine missing/out of range,Label = NaN
+light_conditions,0,16,0.02,Genuine missing/out of range,Label = NaN; rows kept; excluded only from the lighting x severity test (complete-case)
+first_road_class,0,6,0.01,Genuine missing/out of range,Label = NaN; road number set to NaN
+first_road_number,0,6,0.01,Genuine missing/out of range,Set to NaN
+local_authority_highway_current,0,2,0.0,Genuine missing/out of range,Set to NaN
+location_easting_osgr,2,0,0.0,Genuine (guide: 'Null if not known'),Left as NaN; rows kept (location not used)
+location_northing_osgr,2,0,0.0,Genuine (guide: 'Null if not known'),Left as NaN; rows kept (location not used)
+longitude,2,0,0.0,Genuine (guide: 'Null if not known'),Left as NaN; rows kept (location not used)
+latitude,2,0,0.0,Genuine (guide: 'Null if not known'),Left as NaN; rows kept (location not used)

@@ -1,0 +1,4 @@
+severity,number_of_vehicles_mean,number_of_vehicles_median,number_of_vehicles_max,number_of_casualties_mean,number_of_casualties_median,number_of_casualties_max
+Fatal,1.762,2.0,8,1.637,1.0,25
+Serious,1.745,2.0,12,1.342,1.0,142
+Slight,1.835,2.0,17,1.225,1.0,12

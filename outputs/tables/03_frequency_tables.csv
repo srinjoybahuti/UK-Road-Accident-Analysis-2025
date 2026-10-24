@@ -1,0 +1,105 @@
+variable,category,n,pct_of_all,pct_of_valid
+severity,Fatal,1453,1.43,1.43
+severity,Serious,25191,24.81,24.81
+severity,Slight,74881,73.76,73.76
+light,Daylight,72814,71.72,71.73
+light,Darkness - lights lit,20705,20.39,20.4
+light,Darkness - lights unlit,720,0.71,0.71
+light,Darkness - no lighting,5682,5.6,5.6
+light,Darkness - lighting unknown,1588,1.56,1.56
+light,Missing (-1),16,0.02,
+weather,Fine no high winds,83405,82.15,82.15
+weather,Raining no high winds,10230,10.08,10.08
+weather,Other,3314,3.26,3.26
+weather,Unknown,2385,2.35,2.35
+weather,Raining + high winds,880,0.87,0.87
+weather,Fine + high winds,715,0.7,0.7
+weather,Fog or mist,342,0.34,0.34
+weather,Snowing no high winds,235,0.23,0.23
+weather,Snowing + high winds,19,0.02,0.02
+road_surface,Dry,75679,74.54,75.01
+road_surface,Wet or damp,22312,21.98,22.11
+road_surface,unknown (self reported),1342,1.32,1.33
+road_surface,Frost or ice,1261,1.24,1.25
+road_surface,Missing (-1),634,0.62,
+road_surface,Flood over 3cm. deep,151,0.15,0.15
+road_surface,Snow,146,0.14,0.14
+road_type_label,Single carriageway,74150,73.04,73.04
+road_type_label,Dual carriageway,14610,14.39,14.39
+road_type_label,Roundabout,6795,6.69,6.69
+road_type_label,One way street,2398,2.36,2.36
+road_type_label,Unknown,1953,1.92,1.92
+road_type_label,Slip road,1619,1.59,1.59
+area_type,Urban,67148,66.14,66.14
+area_type,Rural,34373,33.86,33.86
+area_type,Unallocated,4,0.0,0.0
+first_road_class_label,A,43827,43.17,43.17
+first_road_class_label,Unclassified,36901,36.35,36.35
+first_road_class_label,B,12975,12.78,12.78
+first_road_class_label,C,4564,4.5,4.5
+first_road_class_label,Motorway,3054,3.01,3.01
+first_road_class_label,A(M),198,0.2,0.2
+first_road_class_label,Missing (-1),6,0.01,
+junction_detail_label,Not at junction or within 20 metres,45333,44.65,47.81
+junction_detail_label,T or staggered junction,28198,27.77,29.74
+junction_detail_label,Crossroads,9456,9.31,9.97
+junction_detail_label,Other junction,6762,6.66,7.13
+junction_detail_label,Missing (-1),6701,6.6,
+junction_detail_label,Using private drive or entrance,2144,2.11,2.26
+junction_detail_label,Junction with more than four arms (not roundabout),1504,1.48,1.59
+junction_detail_label,unknown (self reported),1427,1.41,1.5
+junction_control_label,Not at junction or within 20 metres,43155,42.51,43.07
+junction_control_label,Give way or uncontrolled,41902,41.27,41.82
+junction_control_label,Auto traffic signal,10580,10.42,10.56
+junction_control_label,unknown (self reported),3526,3.47,3.52
+junction_control_label,Missing (-1),1332,1.31,
+junction_control_label,Stop sign,649,0.64,0.65
+junction_control_label,Authorised person,381,0.38,0.38
+pedestrian_crossing_label,No physical crossing facility within 50m,74538,73.42,78.46
+pedestrian_crossing_label,Pedestrian light crossing (pelican or puffin or toucan or similar),6591,6.49,6.94
+pedestrian_crossing_label,Missing (-1),6527,6.43,
+pedestrian_crossing_label,Pedestrian phase at traffic signal,6040,5.95,6.36
+pedestrian_crossing_label,Zebra crossing,3757,3.7,3.95
+pedestrian_crossing_label,Central refuge - no other controls,2757,2.72,2.9
+pedestrian_crossing_label,Human crossing control by other authorised person,573,0.56,0.6
+pedestrian_crossing_label,unknown (self reported),301,0.3,0.32
+pedestrian_crossing_label,Human crossing control by school crossing patrol,257,0.25,0.27
+pedestrian_crossing_label,Footbridge or subway,184,0.18,0.19
+speed_limit_mph,30,49673,48.93,48.93
+speed_limit_mph,20,20045,19.74,19.74
+speed_limit_mph,60,12709,12.52,12.52
+speed_limit_mph,40,8886,8.75,8.75
+speed_limit_mph,70,5600,5.52,5.52
+speed_limit_mph,50,4612,4.54,4.54
+weekday,Monday,14309,14.09,14.09
+weekday,Tuesday,14880,14.66,14.66
+weekday,Wednesday,15369,15.14,15.14
+weekday,Thursday,15304,15.07,15.07
+weekday,Friday,16811,16.56,16.56
+weekday,Saturday,13655,13.45,13.45
+weekday,Sunday,11197,11.03,11.03
+month_name,Jan,8163,8.04,8.04
+month_name,Feb,7155,7.05,7.05
+month_name,Mar,8451,8.32,8.32
+month_name,Apr,8315,8.19,8.19
+month_name,May,8849,8.72,8.72
+month_name,Jun,8725,8.59,8.59
+month_name,Jul,8762,8.63,8.63
+month_name,Aug,8318,8.19,8.19
+month_name,Sep,8581,8.45,8.45
+month_name,Oct,8613,8.48,8.48
+month_name,Nov,9188,9.05,9.05
+month_name,Dec,8405,8.28,8.28
+time_period,Midday (10-15),36342,35.8,35.8
+time_period,Evening peak (16-19),29902,29.45,29.45
+time_period,Morning (06-09),17311,17.05,17.05
+time_period,Late evening (20-23),12387,12.2,12.2
+time_period,Night (00-05),5583,5.5,5.5
+severity_reporting_basis,Based on Injury code reporting,87848,86.53,86.53
+severity_reporting_basis,Based on severity reporting,13677,13.47,13.47
+trunk_road_flag_label,Non-trunk,87970,86.65,93.17
+trunk_road_flag_label,Missing (-1),7108,7.0,
+trunk_road_flag_label,Trunk (Roads managed by Highways England),6447,6.35,6.83
+did_police_officer_attend_scene_of_accident_label,Yes,71381,70.31,70.31
+did_police_officer_attend_scene_of_accident_label,No - accident was reported using a self completion  form (self rep only),23013,22.67,22.67
+did_police_officer_attend_scene_of_accident_label,No,7131,7.02,7.02

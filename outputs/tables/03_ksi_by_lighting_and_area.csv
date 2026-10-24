@@ -1,0 +1,11 @@
+area_type,light,n,ksi_pct
+Rural,Daylight,25048,30.166081124241455
+Rural,Darkness - lights lit,3468,27.53748558246828
+Rural,Darkness - lights unlit,268,32.46268656716418
+Rural,Darkness - no lighting,5131,37.01032937049308
+Rural,Darkness - lighting unknown,445,25.617977528089884
+Urban,Daylight,47762,22.792177881998242
+Urban,Darkness - lights lit,17237,26.68097696814991
+Urban,Darkness - lights unlit,452,26.769911504424783
+Urban,Darkness - no lighting,551,29.58257713248639
+Urban,Darkness - lighting unknown,1143,22.57217847769029

@@ -1,0 +1,517 @@
+{
+  "n": 101525,
+  "desc": {
+    "number_of_vehicles": {
+      "n": 101525,
+      "mean": 1.812,
+      "median": 2.0,
+      "mode": 2,
+      "std": 0.69,
+      "min": 1,
+      "q1": 1.0,
+      "q3": 2.0,
+      "p99": 4.0,
+      "max": 17,
+      "skewness": 1.696
+    },
+    "number_of_casualties": {
+      "n": 101525,
+      "mean": 1.26,
+      "median": 1.0,
+      "mode": 1,
+      "std": 0.817,
+      "min": 1,
+      "q1": 1.0,
+      "q3": 1.0,
+      "p99": 4.0,
+      "max": 142,
+      "skewness": 53.925
+    },
+    "speed_limit": {
+      "n": 101525,
+      "mean": 35.771,
+      "median": 30.0,
+      "mode": 30,
+      "std": 14.638,
+      "min": 20,
+      "q1": 30.0,
+      "q3": 40.0,
+      "p99": 70.0,
+      "max": 70,
+      "skewness": 1.04
+    },
+    "hour": {
+      "n": 101525,
+      "mean": 13.729,
+      "median": 14.0,
+      "mode": 17,
+      "std": 5.12,
+      "min": 0,
+      "q1": 10.0,
+      "q3": 17.0,
+      "p99": 23.0,
+      "max": 23,
+      "skewness": -0.459
+    },
+    "month": {
+      "n": 101525,
+      "mean": 6.608,
+      "median": 7.0,
+      "mode": 11,
+      "std": 3.422,
+      "min": 1,
+      "q1": 4.0,
+      "q3": 10.0,
+      "p99": 12.0,
+      "max": 12,
+      "skewness": -0.037
+    }
+  },
+  "sev_n": {
+    "Fatal": 1453,
+    "Serious": 25191,
+    "Slight": 74881
+  },
+  "sev_pct": {
+    "Fatal": 1.43,
+    "Serious": 24.81,
+    "Slight": 73.76
+  },
+  "ksi_n": 26644,
+  "ksi_pct": 26.24378231962571,
+  "month_max": [
+    "Nov",
+    9188
+  ],
+  "month_min": [
+    "Feb",
+    7155
+  ],
+  "month_dark_max": [
+    "Dec",
+    55.082123303975244
+  ],
+  "month_dark_min": [
+    "Jul",
+    12.408675799086758
+  ],
+  "month_ksi_max": [
+    "Aug",
+    28.67275787448906
+  ],
+  "month_ksi_min": [
+    "Jan",
+    24.084282739189025
+  ],
+  "hour_peak_weekday": 17,
+  "hour_peak_weekend": 14,
+  "hour_peak_weekday_val": 27.21072796934866,
+  "hour_peak_weekend_val": 17.451923076923077,
+  "hour_ksi_max": 4,
+  "hour_ksi_max_val": 33.12302839116719,
+  "hour_ksi_min": 8,
+  "hour_ksi_min_val": 21.366885050625374,
+  "weekday_counts": {
+    "Monday": 14309,
+    "Tuesday": 14880,
+    "Wednesday": 15369,
+    "Thursday": 15304,
+    "Friday": 16811,
+    "Saturday": 13655,
+    "Sunday": 11197
+  },
+  "weekday_ksi": {
+    "Monday": 25.375637710531834,
+    "Tuesday": 25.080645161290324,
+    "Wednesday": 25.486368664194156,
+    "Thursday": 25.764506011500263,
+    "Friday": 25.864017607518885,
+    "Saturday": 28.385206883925303,
+    "Sunday": 28.552290792176475
+  },
+  "weekday_per_day_total": 293.7662835249042,
+  "weekend_per_day_total": 238.96153846153845,
+  "hourly_weekday_morning_peak": 17.210727969348657,
+  "pm_peak_weekday_hours": {
+    "15": 25.65,
+    "16": 26.51,
+    "17": 27.21
+  },
+  "monthly": {
+    "Jan": {
+      "collisions": 8163,
+      "ksi_pct": 24.084282739189025,
+      "dark_pct": 46.576013720445914
+    },
+    "Feb": {
+      "collisions": 7155,
+      "ksi_pct": 24.54227812718379,
+      "dark_pct": 40.614954577218725
+    },
+    "Mar": {
+      "collisions": 8451,
+      "ksi_pct": 25.996923441012896,
+      "dark_pct": 23.837140489998816
+    },
+    "Apr": {
+      "collisions": 8315,
+      "ksi_pct": 27.011425135297653,
+      "dark_pct": 16.406062063988454
+    },
+    "May": {
+      "collisions": 8849,
+      "ksi_pct": 27.133009379590913,
+      "dark_pct": 12.669529837251357
+    },
+    "Jun": {
+      "collisions": 8725,
+      "ksi_pct": 27.15186246418338,
+      "dark_pct": 12.55302074974206
+    },
+    "Jul": {
+      "collisions": 8762,
+      "ksi_pct": 26.44373430723579,
+      "dark_pct": 12.408675799086758
+    },
+    "Aug": {
+      "collisions": 8318,
+      "ksi_pct": 28.67275787448906,
+      "dark_pct": 17.722736563664782
+    },
+    "Sep": {
+      "collisions": 8581,
+      "ksi_pct": 26.430485957347628,
+      "dark_pct": 20.303030303030305
+    },
+    "Oct": {
+      "collisions": 8613,
+      "ksi_pct": 25.809822361546498,
+      "dark_pct": 34.165602136801766
+    },
+    "Nov": {
+      "collisions": 9188,
+      "ksi_pct": 24.825859817152807,
+      "dark_pct": 49.199956460215525
+    },
+    "Dec": {
+      "collisions": 8405,
+      "ksi_pct": 26.59131469363474,
+      "dark_pct": 55.082123303975244
+    }
+  },
+  "light_ksi": {
+    "Daylight": {
+      "n": 72814,
+      "fatal_pct": 1.2126788804350812,
+      "ksi_pct": 25.330293624852363
+    },
+    "Darkness - lights lit": {
+      "n": 20705,
+      "fatal_pct": 1.289543588505192,
+      "ksi_pct": 26.824438541415116
+    },
+    "Darkness - lights unlit": {
+      "n": 720,
+      "fatal_pct": 2.638888888888889,
+      "ksi_pct": 28.88888888888889
+    },
+    "Darkness - no lighting": {
+      "n": 5682,
+      "fatal_pct": 4.716649067229849,
+      "ksi_pct": 36.290038718761
+    },
+    "Darkness - lighting unknown": {
+      "n": 1588,
+      "fatal_pct": 1.0075566750629723,
+      "ksi_pct": 23.425692695214106
+    }
+  },
+  "light_ksi_overall_valid": 26.243978366450264,
+  "ksi_overall": 26.24378231962571,
+  "speed_ksi": {
+    "20": 22.354701920678473,
+    "30": 24.80824592837155,
+    "40": 27.267611973891515,
+    "50": 29.575021682567215,
+    "60": 36.37579667951845,
+    "70": 25.535714285714285
+  },
+  "speed_n": {
+    "20": 20045,
+    "30": 49673,
+    "40": 8886,
+    "50": 4612,
+    "60": 12709,
+    "70": 5600
+  },
+  "weather_ksi": {
+    "Fine + high winds": {
+      "n": 715,
+      "ksi_pct": 32.16783216783217,
+      "ksi_ci_low": 28.847036390187526,
+      "ksi_ci_high": 35.67921667007085
+    },
+    "Fine no high winds": {
+      "n": 83405,
+      "ksi_pct": 26.780169054613033,
+      "ksi_ci_low": 26.480723697139247,
+      "ksi_ci_high": 27.081753226697842
+    },
+    "Fog or mist": {
+      "n": 342,
+      "ksi_pct": 32.16374269005848,
+      "ksi_ci_low": 27.434943810257977,
+      "ksi_ci_high": 37.28877658578267
+    },
+    "Other": {
+      "n": 3314,
+      "ksi_pct": 20.790585395292698,
+      "ksi_ci_low": 19.443154719990268,
+      "ksi_ci_high": 22.20565448235965
+    },
+    "Raining + high winds": {
+      "n": 880,
+      "ksi_pct": 28.068181818181817,
+      "ksi_ci_low": 25.19967448619287,
+      "ksi_ci_high": 31.127334600364563
+    },
+    "Raining no high winds": {
+      "n": 10230,
+      "ksi_pct": 26.060606060606062,
+      "ksi_ci_low": 25.21907477589081,
+      "ksi_ci_high": 26.92010952055592
+    },
+    "Snowing + high winds": {
+      "n": 19,
+      "ksi_pct": 10.526315789473685,
+      "ksi_ci_low": 2.935856029887013,
+      "ksi_ci_high": 31.394082711109007
+    },
+    "Snowing no high winds": {
+      "n": 235,
+      "ksi_pct": 28.51063829787234,
+      "ksi_ci_low": 23.120291851967988,
+      "ksi_ci_high": 34.59224243805914
+    },
+    "Unknown": {
+      "n": 2385,
+      "ksi_pct": 12.452830188679245,
+      "ksi_ci_low": 11.187767605037651,
+      "ksi_ci_high": 13.838650812693265
+    }
+  },
+  "surface_ksi": {
+    "Dry": {
+      "n": 75679,
+      "ksi_pct": 26.333593202870016
+    },
+    "Flood over 3cm. deep": {
+      "n": 151,
+      "ksi_pct": 32.450331125827816
+    },
+    "Frost or ice": {
+      "n": 1261,
+      "ksi_pct": 24.742268041237114
+    },
+    "Snow": {
+      "n": 146,
+      "ksi_pct": 29.45205479452055
+    },
+    "Wet or damp": {
+      "n": 22312,
+      "ksi_pct": 27.44263176765866
+    },
+    "unknown (self reported)": {
+      "n": 1342,
+      "ksi_pct": 9.01639344262295
+    }
+  },
+  "roadtype_ksi": {
+    "Dual carriageway": {
+      "n": 14610,
+      "ksi_pct": 24.55852156057495
+    },
+    "One way street": {
+      "n": 2398,
+      "ksi_pct": 20.558798999165973
+    },
+    "Roundabout": {
+      "n": 6795,
+      "ksi_pct": 19.47019867549669
+    },
+    "Single carriageway": {
+      "n": 74150,
+      "ksi_pct": 27.92582602832097
+    },
+    "Slip road": {
+      "n": 1619,
+      "ksi_pct": 20.012353304508956
+    },
+    "Unknown": {
+      "n": 1953,
+      "ksi_pct": 10.701484895033282
+    }
+  },
+  "area_ksi": {
+    "Rural": {
+      "n": 34373,
+      "ksi_pct": 30.878887498909027
+    },
+    "Unallocated": {
+      "n": 4,
+      "ksi_pct": 50.0
+    },
+    "Urban": {
+      "n": 67148,
+      "ksi_pct": 23.869661047238935
+    }
+  },
+  "junction_ksi": {
+    "Crossroads": {
+      "n": 9456,
+      "ksi_pct": 24.38663282571912
+    },
+    "Junction with more than four arms (not roundabout)": {
+      "n": 1504,
+      "ksi_pct": 26.529255319148938
+    },
+    "Not at junction or within 20 metres": {
+      "n": 45333,
+      "ksi_pct": 28.493591864646064
+    },
+    "Other junction": {
+      "n": 6762,
+      "ksi_pct": 25.77639751552795
+    },
+    "T or staggered junction": {
+      "n": 28198,
+      "ksi_pct": 25.746506844457052
+    },
+    "Using private drive or entrance": {
+      "n": 2144,
+      "ksi_pct": 27.378731343283583
+    },
+    "unknown (self reported)": {
+      "n": 1427,
+      "ksi_pct": 5.39593552908199
+    }
+  },
+  "tp_ksi": {
+    "Evening peak (16-19)": {
+      "n": 29902,
+      "ksi_pct": 25.981539696341382
+    },
+    "Late evening (20-23)": {
+      "n": 12387,
+      "ksi_pct": 29.611689674658916
+    },
+    "Midday (10-15)": {
+      "n": 36342,
+      "ksi_pct": 25.93693247482252
+    },
+    "Morning (06-09)": {
+      "n": 17311,
+      "ksi_pct": 23.037375079429264
+    },
+    "Night (00-05)": {
+      "n": 5583,
+      "ksi_pct": 32.11535017015941
+    }
+  },
+  "reporting_ksi": {
+    "Based on Injury code reporting": {
+      "n": 87848,
+      "ksi_pct": 27.001183863036154
+    },
+    "Based on severity reporting": {
+      "n": 13677,
+      "ksi_pct": 21.378957373693062
+    }
+  },
+  "attend_ksi": {
+    "No": {
+      "n": 7131,
+      "ksi_pct": 16.267003225354088
+    },
+    "No - accident was reported using a self completion  form (self rep only)": {
+      "n": 23013,
+      "ksi_pct": 12.119236953026551
+    },
+    "Yes": {
+      "n": 71381,
+      "ksi_pct": 31.794174920497053
+    }
+  },
+  "weekend_ksi": {
+    "false": {
+      "n": 76673,
+      "ksi_pct": 25.525282694038317
+    },
+    "true": {
+      "n": 24852,
+      "ksi_pct": 28.46048607757927
+    }
+  },
+  "light_area": {
+    "Daylight": {
+      "Rural": 30.17,
+      "Urban": 22.79
+    },
+    "Darkness - lights lit": {
+      "Rural": 27.54,
+      "Urban": 26.68
+    },
+    "Darkness - lights unlit": {
+      "Rural": 32.46,
+      "Urban": 26.77
+    },
+    "Darkness - no lighting": {
+      "Rural": 37.01,
+      "Urban": 29.58
+    },
+    "Darkness - lighting unknown": {
+      "Rural": 25.62,
+      "Urban": 22.57
+    }
+  },
+  "area_share_by_light": {
+    "Daylight": 34.4,
+    "Darkness - lights lit": 16.7,
+    "Darkness - lights unlit": 37.2,
+    "Darkness - no lighting": 90.3,
+    "Darkness - lighting unknown": 28.0
+  },
+  "speed_share_by_light_ge60": {
+    "Daylight": 17.8,
+    "Darkness - lights lit": 5.9,
+    "Darkness - lights unlit": 19.0,
+    "Darkness - no lighting": 65.9,
+    "Darkness - lighting unknown": 12.8
+  },
+  "rural_share_overall": 33.85668554543216,
+  "cas_by_sev": {
+    "Fatal": 1.637,
+    "Serious": 1.342,
+    "Slight": 1.225
+  },
+  "veh_by_sev": {
+    "Fatal": 1.762,
+    "Serious": 1.745,
+    "Slight": 1.835
+  },
+  "unknown_weather_not_attended_pct": 93.54297693920334,
+  "collisions_per_day_range": [
+    255.53571428571428,
+    "Feb",
+    306.26666666666665,
+    "Nov"
+  ],
+  "interpretations": {
+    "fig01_severity_distribution.png": "Most reported collisions are Slight (73.8%, n=74,881); 24.8% are Serious (n=25,191) and 1.4% Fatal (n=1,453). Combined, 26.2% of collisions were Fatal or Serious (KSI). The distribution is strongly imbalanced, so Fatal collisions are rare events and any category-level comparison of fatal outcomes rests on small counts.",
+    "fig02_lighting_weather_distribution.png": "71.7% of collisions with a recorded lighting condition occurred in daylight and 28.3% in darkness; within darkness, lit streets dominate (20.4% of all collisions), followed by unlit roads with no lighting (5.6%), unknown lighting (1.6%) and lights unlit (0.7%). Weather was 'fine, no high winds' in 82.2% of collisions and 'raining, no high winds' in 10.1%; fog/mist and every snow category are each below 0.5%. 'Other' and 'Unknown' account for 5.6%. These are shares of reported collisions, not of journeys, so they do not show that fine weather or daylight are more dangerous.",
+    "fig03_monthly_pattern.png": "Monthly collision counts are fairly stable: from 7,155 (Feb) to 9,188 (Nov). February is the shortest month; per day, the range is 256 (Feb) to 306 (Nov). In contrast the share of collisions in darkness varies strongly with season, from 12.4% in Jul to 55.1% in Dec, following day length. Lighting condition is therefore tied to the calendar (and, as Figure 4 shows, to the hour), which matters when interpreting any lighting-severity association.",
+    "fig04_hourly_pattern.png": "On weekdays collisions peak at 08:00 (23.3 per day) and, higher, at 17:00 (27.2 per day), consistent with commuting hours; on weekends there is one broad afternoon peak around 14:00 (17.5 per day) and more collisions per day than on weekdays in every hour from 00:00 to 04:59. The share of collisions that are Fatal/Serious is highest overnight (up to 33.1% at 04:00; at least 31.6% in every hour from 00:00 to 04:59) and lowest at 08:00 (21.4%), against 26.2% overall. Weekend days also show a higher KSI share (Saturday 28.4%, Sunday 28.6%) than Monday-Friday (25.1-25.9%). The busiest hours are not the most severe hours.",
+    "fig05_severity_by_lighting.png": "Compared with daylight (KSI 25.3%, Fatal 1.2%), the Fatal/Serious share is higher in lit darkness (26.8%, Fatal 1.3%), with unlit lights (28.9%, Fatal 2.6%, n=720) and especially with no lighting (KSI 36.3%, Fatal 4.7%, 3.9 times the daylight fatal share). Darkness with unknown lighting is the exception (KSI 23.4%, Fatal 1.0%), a category likely linked to collisions recorded without police attendance (see Figure 6 note). The pattern is descriptive: rural roads are over-represented in unlit darkness (rural share 90% of 'no lighting' collisions vs 34% in daylight), so lighting is entangled with road environment.",
+    "fig06_ksi_by_road_weather.png": "(a) The KSI share rises with speed limit from 22.4% (20 mph) through 24.8% (30), 27.3% (40) and 29.6% (50) to 36.4% (60 mph); it is lower at 70 mph (25.5%), so the relationship is not monotonic. (b) Single carriageways (27.9%) exceed dual carriageways (24.6%), one-way streets (20.6%), slip roads (20.0%) and roundabouts (19.5%). (c) Weather shows little difference between the two common categories (fine 26.8%, rain 26.1%); fog/mist and fine-with-high-wind categories are higher (about 32%) but with wide intervals. The very low 'Unknown' weather share (12.5%) is likely a reporting effect: 94% of 'Unknown weather' collisions had no police officer attending, and KSI share is 31.8% where an officer attended vs 16.3% (no attendance) and 12.1% (self-completion form). (d) Rural collisions are more often Fatal/Serious (30.9%) than urban ones (23.9%)."
+  }
+}

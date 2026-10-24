@@ -1,0 +1,3 @@
+variable,q1,q3,upper_fence_1.5IQR,n_above_fence,pct_above_fence,max,n_ge_10,p99
+number_of_vehicles,1.0,2.0,3.5,1939,1.91,17,11,4.0
+number_of_casualties,1.0,1.0,1.0,18208,17.93,142,29,4.0

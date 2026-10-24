@@ -1,0 +1,5 @@
+column,n_distinct,rows_with_code_not_in_guide_list,codes_not_in_guide_list
+local_authority_ons_district,351,1202,"['E08000038', 'E08000039']"
+local_authority_highway,208,3998,"['E06000063', 'E06000064', 'E06000065', 'E06000066', 'E08000038', 'E08000039']"
+local_authority_highway_current,208,0,"[""guide provides no code list ('See latest ONS code list')""]"
+local_authority_district,1,0,['all 101525 rows are -1']
