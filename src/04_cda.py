@@ -6,14 +6,20 @@ H1: lighting conditions and collision severity are associated.   alpha = 0.05
 Outputs: outputs/tables/04_*.csv, outputs/statistical_results/04_cda_results.json,
 outputs/statistical_results/04_cda_report.md and outputs/figures/fig07_cda_lighting_severity.png
 """
+import textwrap
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.colors import LinearSegmentedColormap
 from scipy import stats
 
 from common import (ACCENT, LIGHT_ORDER, NEUTRAL, SEVERITY_ORDER, STAT_DIR, TAB_DIR, cohen_v_label,
                     cramers_v, fmt_p, load_processed, save_fig, save_json, set_plot_style, wilson_ci)
+
+
+def wrap(s, w=22):
+    return "\n".join(textwrap.wrap(s, w))
+
 
 ALPHA = 0.05
 SEED = 20250101
@@ -158,36 +164,28 @@ def main() -> None:
     }
 
     # ------------------------------------------------ figure 7
-    div = LinearSegmentedColormap.from_list("bw", ["#0072B2", "#F2F2F2", "#D55E00"])
-    fig = plt.figure(figsize=(14, 4.9))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.25, 1, 1], wspace=0.5)
-    ax = fig.add_subplot(gs[0])
-    lim = max(10, float(np.ceil(res["adj_resid"].abs().values.max() / 5) * 5))
-    im = ax.imshow(res["adj_resid"].values, cmap=div, vmin=-lim, vmax=lim, aspect="auto")
-    ax.set_xticks(range(3)); ax.set_xticklabels(SEVERITY_ORDER)
-    ax.set_yticks(range(5)); ax.set_yticklabels([c.replace("Darkness - ", "Dark: ") for c in LIGHT_ORDER])
-    for i in range(5):
-        for j in range(3):
-            ax.text(j, i, f"{res['adj_resid'].values[i, j]:+.1f}\n(n={obs.values[i, j]:,})", ha="center", va="center", fontsize=8.5,
-                    color="white" if abs(res["adj_resid"].values[i, j]) > 0.65 * lim else "#111")
-    ax.grid(False); ax.set_title("(a) Adjusted residuals\n(observed vs expected under H0)", fontsize=10.5)
-    cb = fig.colorbar(im, ax=ax, orientation="horizontal", location="bottom", fraction=0.06, pad=0.14); cb.set_label("adjusted residual (SD units)", fontsize=8.5)
-    for k, (key, title, xlab) in enumerate([("KSI (Fatal+Serious)", "(b) Fatal or Serious share", "% Fatal or Serious"), ("Fatal", "(c) Fatal share", "% Fatal")]):
-        ax = fig.add_subplot(gs[k + 1])
-        y = np.arange(5)[::-1]
-        vals = P.loc[LIGHT_ORDER]
-        ax.hlines(y, vals[f"{key}_ci_low"], vals[f"{key}_ci_high"], color=ACCENT, lw=2.2)
-        ax.scatter(vals[f"{key}_pct"], y, color=ACCENT, s=50, zorder=3, edgecolor="white", linewidth=0.8)
-        ax.axvline(P.loc["All (valid lighting)", f"{key}_pct"], color=NEUTRAL, ls="--", lw=1)
-        ax.set_yticks(y); ax.set_yticklabels([c.replace("Darkness - ", "Dark: ") for c in LIGHT_ORDER] if k == 0 else [])
-        ax.set_xlim(0, float(vals[f"{key}_ci_high"].max()) * 1.22); ax.set_ylim(-0.5, 4.5)
-        ax.set_xlabel(xlab); ax.set_title(title, fontsize=10.5); ax.grid(axis="y", visible=False)
-        for yy, (_, r) in zip(y, vals.iterrows()):
-            ax.text(r[f"{key}_ci_high"] + 0.02 * ax.get_xlim()[1], yy, f"{r[f'{key}_pct']:.1f}%", fontsize=8.5, va="center")
-    fig.suptitle(f"Figure 7. Lighting x severity: chi-square({res['dof']}) = {res['chi2']:,.1f}, p {('< 1e-300' if res['p'] < 1e-300 else '= ' + fmt_p(res['p']))}, Cramér's V = {res['v']:.3f} ({v_label}); n = {res['n']:,}",
+    short = [c.replace("Darkness - ", "Dark: ") for c in LIGHT_ORDER]
+    ksi_obs = (obs["Fatal"] + obs["Serious"]).values
+    ksi_exp = (res["expected"]["Fatal"] + res["expected"]["Serious"]).values
+    contrib_pct = (100 * res["contrib"].sum(axis=1) / res["chi2"]).values
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.2))
+    ax = axes[0]
+    x = np.arange(5); w = 0.38
+    ax.bar(x - w / 2, ksi_obs, w, color=ACCENT, label="Observed")
+    ax.bar(x + w / 2, ksi_exp, w, color=NEUTRAL, alpha=0.6, label="Expected if independent")
+    for xx, o_ in zip(x, ksi_obs):
+        ax.text(xx - w / 2, o_ + 300, f"{int(o_):,}", ha="center", fontsize=7.8)
+    ax.set_xticks(x); ax.set_xticklabels([wrap(c, 11) for c in short], fontsize=8.5)
+    ax.set_ylabel("Fatal or Serious collisions"); ax.set_title("(a) Observed vs expected Fatal/Serious counts"); ax.legend(); ax.grid(axis="x", visible=False)
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{int(v):,}"))
+    ax = axes[1]
+    ax.bar(x, contrib_pct, color=ACCENT, width=0.6)
+    for xx, c_ in zip(x, contrib_pct):
+        ax.text(xx, c_ + 1.5, f"{c_:.1f}%", ha="center", fontsize=8.5)
+    ax.set_xticks(x); ax.set_xticklabels([wrap(c, 11) for c in short], fontsize=8.5)
+    ax.set_ylim(0, max(contrib_pct) * 1.15); ax.set_ylabel("% of chi-square statistic"); ax.set_title("(b) Which lighting category drives the chi-square?"); ax.grid(axis="x", visible=False)
+    fig.suptitle(f"Figure 7. Lighting x severity: chi-square({res['dof']}) = {res['chi2']:,.1f}, p {('< 1e-300' if res['p'] < 1e-300 else '= ' + fmt_p(res['p']))}, Cramér's V = {res['v']:.3f} ({v_label}); n = {res['n']:,}; {'reject' if reject else 'fail to reject'} H0",
                  x=0.01, ha="left", fontweight="bold", fontsize=11.5, y=1.03)
-    fig.text(0.01, -0.04, "Panels (b)-(c): points = observed %, bars = 95% Wilson CI, dashed line = overall % (all valid-lighting collisions). Positive (orange) residuals = more collisions than expected under independence.",
-             fontsize=8.3, color=NEUTRAL)
     save_fig(fig, "fig07_cda_lighting_severity.png")
 
     # ------------------------------------------------ interpretation text

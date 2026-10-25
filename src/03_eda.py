@@ -250,12 +250,11 @@ def main() -> None:
     ax.set_xticks(range(0, 24, 3)); ax.set_xlabel("Hour of day (00 = 00:00-00:59)"); ax.set_ylabel("Mean collisions per day")
     ax.legend(loc="upper left"); ax.set_title("(a) Collisions per day, by hour"); ax.set_ylim(bottom=0)
     ax = axes[1]
-    ax.fill_between(hourly.index, hourly["ksi_ci_low"], hourly["ksi_ci_high"], color=SEV_COLORS["Serious"], alpha=0.25, lw=0)
     ax.plot(hourly.index, hourly["ksi_pct"], color="#B36B00", lw=2.2, marker="o", ms=4)
     ax.axhline(R["ksi_overall"], color=NEUTRAL, ls="--", lw=1)
     ax.text(23.4, R["ksi_overall"] - 0.7, f"overall {R['ksi_overall']:.1f}%", ha="right", va="top", fontsize=8.5, color=NEUTRAL)
     ax.set_xticks(range(0, 24, 3)); ax.set_xlabel("Hour of day"); ax.set_ylabel("% of collisions Fatal or Serious")
-    ax.set_title("(b) Share Fatal/Serious, by hour (95% Wilson CI)"); ax.set_ylim(bottom=0)
+    ax.set_title("(b) Share Fatal/Serious, by hour"); ax.set_ylim(bottom=0)
     fig.suptitle("Figure 4. Hourly pattern of reported collisions and severity, 2025", x=0.01, ha="left", fontweight="bold", fontsize=12, y=1.03)
     fig.tight_layout()
     save_fig(fig, "fig04_hourly_pattern.png")
@@ -295,15 +294,16 @@ def main() -> None:
             t = t[t["category"].isin(["Urban", "Rural"])]
         y = np.arange(len(t))
         colors = [GREY if c in ("Unknown", "Other") else ACCENT for c in t["category"]]
-        ax.hlines(y, t["ksi_ci_low"], t["ksi_ci_high"], color=colors, lw=2)
-        ax.scatter(t["ksi_pct"], y, color=colors, s=48, zorder=3, edgecolor="white", linewidth=0.8)
+        ax.barh(y, t["ksi_pct"], color=colors, height=0.62)
+        for yy, p_ in zip(y, t["ksi_pct"]):
+            ax.text(p_ + 0.6, yy, f"{p_:.1f}%", va="center", fontsize=8.5)
         ax.axvline(R["ksi_overall"], color=NEUTRAL, ls="--", lw=1)
         ax.set_yticks(y); ax.set_yticklabels([f"{wrap(c, 26)}\n(n={n:,})" for c, n in zip(t["category"], t["n"])], fontsize=8.6)
-        ax.set_xlim(0, 42); ax.set_ylim(-0.6, len(t) - 0.4)
+        ax.set_xlim(0, 45); ax.set_ylim(-0.6, len(t) - 0.4)
         if v == "speed_limit_mph":
             ax.invert_yaxis()
         ax.set_xlabel("% of collisions Fatal or Serious"); ax.set_title(title); ax.grid(axis="y", visible=False)
-    fig.suptitle(f"Figure 6. Share of collisions that were Fatal or Serious, by road and weather characteristics\n(points = %, bars = 95% Wilson CI; dashed line = overall {R['ksi_overall']:.1f}%; grey = 'Other'/'Unknown')",
+    fig.suptitle(f"Figure 6. Share of collisions that were Fatal or Serious, by road and weather characteristics\n(bars = %; dashed line = overall {R['ksi_overall']:.1f}%; grey = 'Other'/'Unknown')",
                  x=0.01, ha="left", fontweight="bold", fontsize=11.5, y=1.02)
     fig.tight_layout()
     save_fig(fig, "fig06_ksi_by_road_weather.png")
@@ -364,7 +364,7 @@ def main() -> None:
             f"(b) Single carriageways ({R['roadtype_ksi']['Single carriageway']['ksi_pct']:.1f}%) exceed dual carriageways ({R['roadtype_ksi']['Dual carriageway']['ksi_pct']:.1f}%), one-way streets ({R['roadtype_ksi']['One way street']['ksi_pct']:.1f}%), "
             f"slip roads ({R['roadtype_ksi']['Slip road']['ksi_pct']:.1f}%) and roundabouts ({R['roadtype_ksi']['Roundabout']['ksi_pct']:.1f}%). "
             f"(c) Weather shows little difference between the two common categories (fine {R['weather_ksi']['Fine no high winds']['ksi_pct']:.1f}%, rain {R['weather_ksi']['Raining no high winds']['ksi_pct']:.1f}%); fog/mist and fine-with-high-wind categories are higher "
-            f"(about 32%) but with wide intervals. The very low 'Unknown' weather share ({R['weather_ksi']['Unknown']['ksi_pct']:.1f}%) is likely a reporting effect: "
+            f"(about 32%) but are based on few collisions. The very low 'Unknown' weather share ({R['weather_ksi']['Unknown']['ksi_pct']:.1f}%) is likely a reporting effect: "
             f"{R['unknown_weather_not_attended_pct']:.0f}% of 'Unknown weather' collisions had no police officer attending, and KSI share is "
             f"{att['Yes']['ksi_pct']:.1f}% where an officer attended vs {att['No']['ksi_pct']:.1f}% (no attendance) and {att_self['ksi_pct']:.1f}% (self-completion form). "
             f"(d) Rural collisions are more often Fatal/Serious ({R['area_ksi']['Rural']['ksi_pct']:.1f}%) than urban ones ({R['area_ksi']['Urban']['ksi_pct']:.1f}%)."),

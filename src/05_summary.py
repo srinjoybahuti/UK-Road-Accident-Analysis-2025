@@ -24,9 +24,9 @@ def main() -> None:
     C = load_json(STAT_DIR / "04_cda_results.json")
     interp = R["interpretations"]
     interp["fig07_cda_lighting_severity.png"] = (
-        f"Panel (a) shows adjusted residuals: Daylight has fewer Fatal/Serious and more Slight collisions than independence would predict, while 'Darkness - no lighting' has far more Fatal "
-        f"(+{C['top_adjusted_residual_cells'][0]['adj_resid']:.1f}) and Serious collisions and far fewer Slight ones. Panels (b)-(c) give the observed Fatal-or-Serious and Fatal shares with 95% Wilson CIs. "
-        f"Only 'no lighting' differs markedly from the overall share on both measures; 'lights lit' is slightly higher than daylight, 'lights unlit' is higher but imprecise (n=720), and 'lighting unknown' is lower. "
+        f"Panel (a) compares the observed number of Fatal or Serious collisions in each lighting category with the number expected if lighting and severity were independent: "
+        f"'Darkness - no lighting' has far more than expected, while Daylight and 'lighting unknown' have fewer. Panel (b) shows each category's share of the chi-square statistic. "
+        f"Only 'no lighting' departs markedly from independence; 'lights lit' is slightly higher than daylight and 'lights unlit' is higher but based on few collisions (n=720). "
         f"{C['interpretation']['practical']}")
 
     desc = pd.read_csv(TAB_DIR / "03_descriptive_numeric.csv")
@@ -133,7 +133,7 @@ def main() -> None:
         "fig04_hourly_pattern.png": "Figure 4 - Hourly pattern and Fatal/Serious share (`03_hourly_summary.csv`)",
         "fig05_severity_by_lighting.png": "Figure 5 - Severity by lighting (`03_severity_by_lighting.csv`)",
         "fig06_ksi_by_road_weather.png": "Figure 6 - Fatal/Serious share by speed limit, road type, weather, area (`03_ksi_by_conditions.csv`)",
-        "fig07_cda_lighting_severity.png": "Figure 7 - CDA: adjusted residuals and severity shares with 95% CI (`04_*.csv`)",
+        "fig07_cda_lighting_severity.png": "Figure 7 - CDA: observed vs expected Fatal/Serious counts and chi-square contributions (`04_*.csv`)",
     }
     for f in figs:
         a(f"### `{f}`")
