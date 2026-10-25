@@ -138,13 +138,13 @@ Collisions involve a median of 2 vehicles (mean 1.81, SD 0.69, max 17) and a med
 
 ### 4.3 Severity by lighting (descriptive)
 
-| category                    |     n |   fatal |   serious |   slight |   fatal_pct |   ksi_pct |   ksi_ci_low |   ksi_ci_high |
-|:----------------------------|------:|--------:|----------:|---------:|------------:|----------:|-------------:|--------------:|
-| Daylight                    | 72814 |     883 |     17561 |    54370 |        1.21 |     25.33 |        25.02 |         25.65 |
-| Darkness - lights lit       | 20705 |     267 |      5287 |    15151 |        1.29 |     26.82 |        26.23 |         27.43 |
-| Darkness - lights unlit     |   720 |      19 |       189 |      512 |        2.64 |     28.89 |        25.7  |         32.3  |
-| Darkness - no lighting      |  5682 |     268 |      1794 |     3620 |        4.72 |     36.29 |        35.05 |         37.55 |
-| Darkness - lighting unknown |  1588 |      16 |       356 |     1216 |        1.01 |     23.43 |        21.41 |         25.57 |
+| category                    |     n |   fatal |   serious |   slight |   fatal_pct |   ksi_pct |
+|:----------------------------|------:|--------:|----------:|---------:|------------:|----------:|
+| Daylight                    | 72814 |     883 |     17561 |    54370 |        1.21 |     25.33 |
+| Darkness - lights lit       | 20705 |     267 |      5287 |    15151 |        1.29 |     26.82 |
+| Darkness - lights unlit     |   720 |      19 |       189 |      512 |        2.64 |     28.89 |
+| Darkness - no lighting      |  5682 |     268 |      1794 |     3620 |        4.72 |     36.29 |
+| Darkness - lighting unknown |  1588 |      16 |       356 |     1216 |        1.01 |     23.43 |
 
 ### 4.4 Key EDA findings
 
@@ -201,7 +201,7 @@ Compared with daylight (KSI 25.3%, Fatal 1.2%), the Fatal/Serious share is highe
 
 *Figure 7 - CDA: observed vs expected Fatal/Serious counts and chi-square contributions (`04_*.csv`)*
 
-Panel (a) compares the observed number of Fatal or Serious collisions in each lighting category with the number expected if lighting and severity were independent: 'Darkness - no lighting' has far more than expected, while Daylight and 'lighting unknown' have fewer. Panel (b) shows each category's share of the chi-square statistic. Only 'no lighting' departs markedly from independence; 'lights lit' is slightly higher than daylight and 'lights unlit' is higher but based on few collisions (n=720). With n = 101,509 even small departures from independence are detectable, so significance alone is uninformative. Cramér's V = 0.058 (95% bootstrap CI 0.052-0.065; bias-corrected 0.058) is negligible by Cohen's benchmarks for df* = 2 (small 0.07, medium 0.21, large 0.35); V^2 = 0.0034, i.e. a very weak overall association. The overall effect is small because most collisions occur in daylight or lit darkness, where severity is close to the overall mix; the 'no lighting' row (only 5.6% of collisions) supplies 89.6% of the chi-square statistic.
+Panel (a) compares the observed number of Fatal or Serious collisions in each lighting category with the number expected if lighting and severity were independent: 'Darkness - no lighting' has far more than expected, while Daylight and 'lighting unknown' have fewer. Panel (b) shows each category's share of the chi-square statistic. Only 'no lighting' departs markedly from independence; 'lights lit' is slightly higher than daylight and 'lights unlit' is higher but based on few collisions (n=720). The association is very weak: Cramér's V = 0.058 (negligible). With n = 101,509 even tiny differences are statistically significant, so the size of the difference matters more than the p-value. Most collisions occur in daylight or lit darkness, where the severity mix is close to the overall mix; the 'no lighting' group is only 5.6% of collisions but accounts for 89.6% of the chi-square statistic.
 
 ## 6. Confirmatory data analysis
 
@@ -212,7 +212,7 @@ Panel (a) compares the observed number of Fatal or Serious collisions in each li
 - Significance level: alpha = 0.05
 - Test: Pearson chi-square test of independence (5 x 3 table, no continuity correction); analysed n = 101,509 (16 collisions with missing lighting excluded - complete-case).
 
-**Why this test:** both variables are categorical, observations are distinct collisions, and the expected-count rule is met (minimum expected count 10.31; 0% of cells < 5; 0 cells < 1). No alternative test was needed. Independence of observations cannot be fully verified (collisions cluster in space/time) and the data are a census of reported collisions, not a random sample - see limitations.
+**Why this test:** both variables are categorical and the expected-count rule is met (smallest expected count 10.31; 0% of cells below 5). Collisions cluster in space and time and the data are a census of reported collisions, not a random sample - see limitations.
 
 **Observed frequencies**
 
@@ -236,50 +236,40 @@ Panel (a) compares the observed number of Fatal or Serious collisions in each li
 
 **Result**
 
-- chi-square(8) = **681.80**, p = **5.934e-142** (log10 p = -141.2); decision at alpha = 0.05: **Reject H0**.
-- Effect size: Cramér's V = **0.058** (95% bootstrap CI 0.052-0.065; bias-corrected 0.058) - **negligible** (Cohen benchmarks for df* = 2: 0.071 / 0.212 / 0.354).
+- chi-square(8) = **681.80**, p = **5.934e-142**; decision at alpha = 0.05: **Reject H0**.
+- Cramér's V = **0.058** (negligible).
 
-**Severity proportions with 95% Wilson CIs (and risk ratios vs. daylight, Katz CI)**
+**Severity by lighting (% of collisions in each lighting category)**
 
-| lighting                    |      n |   Fatal_pct |   Fatal_ci_low |   Fatal_ci_high |   KSI (Fatal+Serious)_pct |   KSI (Fatal+Serious)_ci_low |   KSI (Fatal+Serious)_ci_high |   KSI_RR_vs_daylight |   KSI_RR_ci_low |   KSI_RR_ci_high |   Fatal_RR_vs_daylight |
-|:----------------------------|-------:|------------:|---------------:|----------------:|--------------------------:|-----------------------------:|------------------------------:|---------------------:|----------------:|-----------------:|-----------------------:|
-| Daylight                    |  72814 |        1.21 |           1.14 |            1.29 |                     25.33 |                        25.02 |                         25.65 |               nan    |          nan    |           nan    |                 nan    |
-| Darkness - lights lit       |  20705 |        1.29 |           1.14 |            1.45 |                     26.82 |                        26.23 |                         27.43 |                 1.06 |            1.03 |             1.09 |                   1.06 |
-| Darkness - lights unlit     |    720 |        2.64 |           1.7  |            4.08 |                     28.89 |                        25.7  |                         32.3  |                 1.14 |            1.02 |             1.28 |                   2.18 |
-| Darkness - no lighting      |   5682 |        4.72 |           4.2  |            5.3  |                     36.29 |                        35.05 |                         37.55 |                 1.43 |            1.38 |             1.49 |                   3.89 |
-| Darkness - lighting unknown |   1588 |        1.01 |           0.62 |            1.63 |                     23.43 |                        21.41 |                         25.57 |                 0.92 |            0.85 |             1.01 |                   0.83 |
-| All (valid lighting)        | 101509 |        1.43 |           1.36 |            1.51 |                     26.24 |                        25.97 |                         26.52 |               nan    |          nan    |           nan    |                 nan    |
-
-**Robustness (stratified tests; all four reported)**
-
-| stratifier        | stratum                                            |     n |     chi2 | p_used_text          |   cramers_v |   min_expected | chi2_assumptions_met   |
-|:------------------|:---------------------------------------------------|------:|---------:|:---------------------|------------:|---------------:|:-----------------------|
-| area_type         | Urban                                              | 67145 | 144.772  | 2.411e-27            |      0.0328 |         3.5072 | True                   |
-| area_type         | Rural                                              | 34360 | 213.361  | 9.721e-42            |      0.0557 |         7.2694 | True                   |
-| police_attendance | Police attended                                    | 71365 | 317.258  | 8.699e-64            |      0.0471 |        11.4409 | True                   |
-| police_attendance | No police attendance (incl. self-completion forms) | 30144 |  77.4829 | 0.0002 (Monte Carlo) |      0.0358 |         0.066  | False                  |
+| lighting                    |      n |   Fatal % |   Serious % |   Slight % |   Fatal or Serious % |
+|:----------------------------|-------:|----------:|------------:|-----------:|---------------------:|
+| Daylight                    |  72814 |       1.2 |        24.1 |       74.7 |                 25.3 |
+| Darkness - lights lit       |  20705 |       1.3 |        25.5 |       73.2 |                 26.8 |
+| Darkness - lights unlit     |    720 |       2.6 |        26.2 |       71.1 |                 28.9 |
+| Darkness - no lighting      |   5682 |       4.7 |        31.6 |       63.7 |                 36.3 |
+| Darkness - lighting unknown |   1588 |       1   |        22.4 |       76.6 |                 23.4 |
+| All (valid lighting)        | 101509 |       1.4 |        24.8 |       73.8 |                 26.2 |
 
 **Conclusions**
 
 - Because p = 5.934e-142 is below alpha = 0.05, H0 is rejected: the data show a statistically significant association between lighting condition and collision severity.
-- With n = 101,509 even small departures from independence are detectable, so significance alone is uninformative. Cramér's V = 0.058 (95% bootstrap CI 0.052-0.065; bias-corrected 0.058) is negligible by Cohen's benchmarks for df* = 2 (small 0.07, medium 0.21, large 0.35); V^2 = 0.0034, i.e. a very weak overall association. The overall effect is small because most collisions occur in daylight or lit darkness, where severity is close to the overall mix; the 'no lighting' row (only 5.6% of collisions) supplies 89.6% of the chi-square statistic.
-- The association is concentrated in darkness with no street lighting: Fatal or Serious share 36.3% (95% CI 35.0-37.5) vs 25.3% in daylight (risk ratio 1.43, 95% CI 1.38-1.49); Fatal share 4.7% vs 1.2% (RR 3.89, 95% CI 3.40-4.45). Cells with the largest adjusted residuals: Darkness - no lighting x Fatal (+21.5); Darkness - no lighting x Slight (-17.7); Darkness - no lighting x Serious (+12.1); Daylight x Slight (+10.5).
-- Stratified re-analysis (Urban: chi2(8) = 144.8, p 2.411e-27, V = 0.033; Rural: chi2(8) = 213.4, p 9.721e-42, V = 0.056; Police attended: chi2(8) = 317.3, p 8.699e-64, V = 0.047; No police attendance (incl. self-completion forms): chi2(8) = 77.5, p 0.0002 (Monte Carlo), V = 0.036). The association remains significant in every stratum; in every stratum 'no lighting' has the highest Fatal/Serious share. The association is therefore not simply an artefact of mixing urban/rural roads or police-attended and unattended reports, although the strata do not rule out other confounders (e.g. speed limit, road type, time of day).
+- The association is very weak: Cramér's V = 0.058 (negligible). With n = 101,509 even tiny differences are statistically significant, so the size of the difference matters more than the p-value. Most collisions occur in daylight or lit darkness, where the severity mix is close to the overall mix; the 'no lighting' group is only 5.6% of collisions but accounts for 89.6% of the chi-square statistic.
+- The difference comes mainly from darkness with no street lighting: 36.3% of these collisions were Fatal or Serious, against 25.3% in daylight, and 4.7% were Fatal against 1.2% in daylight (about 3.9 times as high). Other lighting groups are close to the overall 26.2%.
 - **Plain-language conclusion:** lighting condition and collision severity are not independent in the 2025 reported-collision data, but the overall association is weak; it is driven almost entirely by collisions in darkness with no street lighting, which are more often Fatal or Serious. This is an association, not evidence that darkness causes more severe collisions.
 
-Full detail: `outputs/statistical_results/04_cda_report.md` and `04_cda_results.json`.
+Full detail: `outputs/statistical_results/04_cda_report.md`. Optional advanced methods (bootstrap, confidence intervals, risk ratios, residuals, robustness checks): `outputs/technical/04_advanced_methods.md`.
 
 ## 7. Limitations and practical implications
 
 **Limitations**
 
 - **No exposure data:** counts of reported collisions are not rates. A larger number or share of collisions in daylight reflects how much travel happens in daylight, not that daylight is more dangerous.
-- **Association only:** lighting correlates with time of day, season, rurality, speed limit and road class. Only two stratified checks were done; no multivariable adjustment (and no modelling, by design).
+- **Association only:** lighting correlates with time of day, season, rurality, speed limit and road class. No multivariable adjustment was done (no modelling, by design).
 - **Measurement of severity and lighting:** severity is recorded under two systems (injury-based and officer-reported), and lighting/weather are officer judgements. 30,144 collisions (29.7%) had no police attendance, and these have much lower Fatal/Serious shares and more 'unknown' codes.
 - **Under-reporting:** STATS19 contains only police-reported injury collisions; slight-injury collisions are known to be under-reported more than serious/fatal ones, which inflates the Fatal/Serious share.
-- **Independence:** collisions are not strictly independent (spatial/temporal clustering); nominal p-values are therefore approximate (here p is far below alpha, so the decision is not sensitive).
+- **Independence:** collisions are not strictly independent (spatial/temporal clustering), so the p-value is approximate; it is far below alpha, so the decision is not sensitive.
 - **Large n:** with 101,509 observations, significance is almost guaranteed; the effect size, not the p-value, should carry the interpretation.
-- **Sparse categories:** Fatal collisions in small lighting categories ('lights unlit', 'lighting unknown') rest on few events (19 and 16), so their proportions are imprecise; the 'no police attendance' stratum fails the chi-square expected-count rule and was assessed by Monte Carlo permutation.
+- **Sparse categories:** Fatal collisions in small lighting categories ('lights unlit', 'lighting unknown') rest on few events (19 and 16), so their proportions are imprecise.
 - **Data quality notes:** 171 'Daylight' collisions between 00:00 and 03:59 and 236 'Darkness' collisions at midday were retained and flagged; `local_authority_district` is empty in the 2025 file; a few new ONS local-authority codes are missing from the guide's list; the guide's `junction_control` code 0 is never used (coded -1 where not at a junction).
 - **Scope:** Great Britain only, a single year, collision-level (not casualty-level) data.
 
@@ -296,11 +286,6 @@ Full detail: `outputs/statistical_results/04_cda_report.md` and `04_cda_results.
 - Department for Transport. *Road safety data guide* (field definitions and code lists, sheets `2024_code_list` and `2011_to_2024_conversion`) - `data/reference/data_guide_2025.xlsx`.
 - Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. *Philosophical Magazine*, 50(302), 157-175.
 - Cramér, H. (1946). *Mathematical Methods of Statistics*. Princeton University Press.
-- Cohen, J. (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum.
-- Bergsma, W. (2013). A bias-correction for Cramér's V and Tschuprow's T. *Journal of the Korean Statistical Society*, 42(3), 323-328.
-- Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association*, 22(158), 209-212.
-- Katz, D., Baptista, J., Azen, S. P., & Pike, M. C. (1978). Obtaining confidence intervals for the risk ratio in cohort studies. *Biometrics*, 34(3), 469-474.
-- Agresti, A. (2013). *Categorical Data Analysis* (3rd ed.). Wiley.
 - Software: Python; pandas 3.1.0, NumPy 2.5.4, SciPy 1.18.1, Matplotlib 3.11.2, seaborn 0.13.2.
 
 ### Output index
@@ -311,6 +296,7 @@ Full detail: `outputs/statistical_results/04_cda_report.md` and `04_cda_results.
 | Preprocessing summary | `outputs/preprocessing_summary.md` |
 | EDA figure interpretations | `outputs/figure_interpretations.md` |
 | CDA report / JSON results | `outputs/statistical_results/04_cda_report.md`, `04_cda_results.json` |
+| Optional technical documentation (advanced methods) | `outputs/technical/04_advanced_methods.md` |
 | Summary tables | `outputs/tables/*.csv` |
 | Figures | `outputs/figures/fig01..fig07*.png` |
 | Processed data | `data/processed/collisions_2025_processed.csv` |

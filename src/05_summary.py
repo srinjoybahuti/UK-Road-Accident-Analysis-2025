@@ -32,11 +32,10 @@ def main() -> None:
     desc = pd.read_csv(TAB_DIR / "03_descriptive_numeric.csv")
     freq = pd.read_csv(TAB_DIR / "03_frequency_tables.csv")
     ft = lambda v: freq[freq.variable == v][["category", "n", "pct_of_all", "pct_of_valid"]].rename(columns={"pct_of_all": "% of all", "pct_of_valid": "% of valid"}).to_markdown(index=False, missingval="-")  # noqa: E731
-    sev_light = pd.read_csv(TAB_DIR / "03_severity_by_lighting.csv")[["category", "n", "fatal", "serious", "slight", "fatal_pct", "ksi_pct", "ksi_ci_low", "ksi_ci_high"]].round(2)
+    sev_light = pd.read_csv(TAB_DIR / "03_severity_by_lighting.csv")[["category", "n", "fatal", "serious", "slight", "fatal_pct", "ksi_pct"]].round(2)
     obs = pd.read_csv(TAB_DIR / "04_observed_frequencies.csv")
     exp = pd.read_csv(TAB_DIR / "04_expected_frequencies.csv")
     prop = pd.read_csv(TAB_DIR / "04_severity_proportions_wilson_ci.csv")
-    strata = pd.read_csv(TAB_DIR / "04_robustness_stratified_tests.csv")
     figs = sorted(p.name for p in (OUT_DIR / "figures").glob("fig*.png"))
 
     d = R["desc"]
@@ -153,9 +152,9 @@ def main() -> None:
     a(f"- Significance level: alpha = {C['alpha']}")
     a(f"- Test: {C['test']}; analysed n = {C['n_analysed']:,} ({C['n_excluded_missing_lighting']} collisions with missing lighting excluded - complete-case).")
     a("")
-    a("**Why this test:** both variables are categorical, observations are distinct collisions, and the expected-count rule is met "
-      f"(minimum expected count {C['min_expected']:.2f}; {C['pct_cells_expected_lt5']:.0f}% of cells < 5; {C['cells_expected_lt1']} cells < 1). "
-      "No alternative test was needed. Independence of observations cannot be fully verified (collisions cluster in space/time) and the data are a census of reported collisions, not a random sample - see limitations.")
+    a("**Why this test:** both variables are categorical and the expected-count rule is met "
+      f"(smallest expected count {C['min_expected']:.2f}; {C['pct_cells_expected_lt5']:.0f}% of cells below 5). "
+      "Collisions cluster in space and time and the data are a census of reported collisions, not a random sample - see limitations.")
     a("")
     a("**Observed frequencies**")
     a("")
@@ -167,25 +166,21 @@ def main() -> None:
     a("")
     a("**Result**")
     a("")
-    a(f"- chi-square({C['dof']}) = **{C['chi2']:,.2f}**, p = **{C['p_value_formatted']}** (log10 p = {C['log10_p']:.1f}); decision at alpha = {C['alpha']}: **{C['decision']}**.")
-    a(f"- Effect size: Cramér's V = **{C['cramers_v']:.3f}** (95% bootstrap CI {C['cramers_v_ci95'][0]:.3f}-{C['cramers_v_ci95'][1]:.3f}; bias-corrected {C['cramers_v_bias_corrected']:.3f}) - **{C['effect_size_label']}** "
-      f"(Cohen benchmarks for df* = {C['df_star']}: {C['cohen_thresholds_small_medium_large'][0]:.3f} / {C['cohen_thresholds_small_medium_large'][1]:.3f} / {C['cohen_thresholds_small_medium_large'][2]:.3f}).")
+    a(f"- chi-square({C['dof']}) = **{C['chi2']:,.2f}**, p = **{C['p_value_formatted']}**; decision at alpha = {C['alpha']}: **{C['decision']}**.")
+    a(f"- Cramér's V = **{C['cramers_v']:.3f}** ({C['effect_size_label']}).")
     a("")
-    a("**Severity proportions with 95% Wilson CIs (and risk ratios vs. daylight, Katz CI)**")
+    a("**Severity by lighting (% of collisions in each lighting category)**")
     a("")
-    a(prop[["lighting", "n", "Fatal_pct", "Fatal_ci_low", "Fatal_ci_high", "KSI (Fatal+Serious)_pct", "KSI (Fatal+Serious)_ci_low", "KSI (Fatal+Serious)_ci_high", "KSI_RR_vs_daylight", "KSI_RR_ci_low", "KSI_RR_ci_high", "Fatal_RR_vs_daylight"]].round(2).to_markdown(index=False, missingval="-"))
-    a("")
-    a("**Robustness (stratified tests; all four reported)**")
-    a("")
-    a(strata[["stratifier", "stratum", "n", "chi2", "p_used_text", "cramers_v", "min_expected", "chi2_assumptions_met"]].round(4).to_markdown(index=False))
+    a(prop[["lighting", "n", "Fatal_pct", "Serious_pct", "Slight_pct", "KSI (Fatal+Serious)_pct"]].rename(
+        columns={"Fatal_pct": "Fatal %", "Serious_pct": "Serious %", "Slight_pct": "Slight %", "KSI (Fatal+Serious)_pct": "Fatal or Serious %"}).round(1).to_markdown(index=False))
     a("")
     a("**Conclusions**")
     a("")
-    for k in ("decision", "practical", "pattern", "robustness"):
+    for k in ("decision", "practical", "pattern"):
         a(f"- {C['interpretation'][k]}")
     a("- **Plain-language conclusion:** lighting condition and collision severity are not independent in the 2025 reported-collision data, but the overall association is weak; it is driven almost entirely by collisions in darkness with no street lighting, which are more often Fatal or Serious. This is an association, not evidence that darkness causes more severe collisions.")
     a("")
-    a("Full detail: `outputs/statistical_results/04_cda_report.md` and `04_cda_results.json`.")
+    a("Full detail: `outputs/statistical_results/04_cda_report.md`. Optional advanced methods (bootstrap, confidence intervals, risk ratios, residuals, robustness checks): `outputs/technical/04_advanced_methods.md`.")
     a("")
 
     # 7 ------------------------------------------------------------------ limitations
@@ -194,13 +189,13 @@ def main() -> None:
     a("**Limitations**")
     a("")
     a("- **No exposure data:** counts of reported collisions are not rates. A larger number or share of collisions in daylight reflects how much travel happens in daylight, not that daylight is more dangerous.")
-    a("- **Association only:** lighting correlates with time of day, season, rurality, speed limit and road class. Only two stratified checks were done; no multivariable adjustment (and no modelling, by design).")
+    a("- **Association only:** lighting correlates with time of day, season, rurality, speed limit and road class. No multivariable adjustment was done (no modelling, by design).")
     a("- **Measurement of severity and lighting:** severity is recorded under two systems (injury-based and officer-reported), and lighting/weather are officer judgements. "
       f"{R['attend_ksi']['No']['n'] + [v['n'] for k, v in R['attend_ksi'].items() if k.startswith('No -')][0]:,} collisions ({100 * (R['attend_ksi']['No']['n'] + [v['n'] for k, v in R['attend_ksi'].items() if k.startswith('No -')][0]) / R['n']:.1f}%) had no police attendance, and these have much lower Fatal/Serious shares and more 'unknown' codes.")
     a("- **Under-reporting:** STATS19 contains only police-reported injury collisions; slight-injury collisions are known to be under-reported more than serious/fatal ones, which inflates the Fatal/Serious share.")
-    a(f"- **Independence:** collisions are not strictly independent (spatial/temporal clustering); nominal p-values are therefore approximate (here p is far below alpha, so the decision is not sensitive).")
+    a(f"- **Independence:** collisions are not strictly independent (spatial/temporal clustering), so the p-value is approximate; it is far below alpha, so the decision is not sensitive.")
     a(f"- **Large n:** with {C['n_analysed']:,} observations, significance is almost guaranteed; the effect size, not the p-value, should carry the interpretation.")
-    a("- **Sparse categories:** Fatal collisions in small lighting categories ('lights unlit', 'lighting unknown') rest on few events (19 and 16), so their proportions are imprecise; the 'no police attendance' stratum fails the chi-square expected-count rule and was assessed by Monte Carlo permutation.")
+    a("- **Sparse categories:** Fatal collisions in small lighting categories ('lights unlit', 'lighting unknown') rest on few events (19 and 16), so their proportions are imprecise.")
     a(f"- **Data quality notes:** {m2['daylight_00_03h']} 'Daylight' collisions between 00:00 and 03:59 and {m2['dark_10_14h']} 'Darkness' collisions at midday were retained and flagged; `local_authority_district` is empty in the 2025 file; a few new ONS local-authority codes are missing from the guide's list; the guide's `junction_control` code 0 is never used (coded -1 where not at a junction).")
     a("- **Scope:** Great Britain only, a single year, collision-level (not casualty-level) data.")
     a("")
@@ -219,17 +214,12 @@ def main() -> None:
     a(f"- Department for Transport. *Road safety data guide* (field definitions and code lists, sheets `2024_code_list` and `2011_to_2024_conversion`) - `{m1['guide_file']}`.")
     a("- Pearson, K. (1900). On the criterion that a given system of deviations from the probable in the case of a correlated system of variables is such that it can be reasonably supposed to have arisen from random sampling. *Philosophical Magazine*, 50(302), 157-175.")
     a("- Cramér, H. (1946). *Mathematical Methods of Statistics*. Princeton University Press.")
-    a("- Cohen, J. (1988). *Statistical Power Analysis for the Behavioral Sciences* (2nd ed.). Lawrence Erlbaum.")
-    a("- Bergsma, W. (2013). A bias-correction for Cramér's V and Tschuprow's T. *Journal of the Korean Statistical Society*, 42(3), 323-328.")
-    a("- Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association*, 22(158), 209-212.")
-    a("- Katz, D., Baptista, J., Azen, S. P., & Pike, M. C. (1978). Obtaining confidence intervals for the risk ratio in cohort studies. *Biometrics*, 34(3), 469-474.")
-    a("- Agresti, A. (2013). *Categorical Data Analysis* (3rd ed.). Wiley.")
     a(f"- Software: Python; pandas {version('pandas')}, NumPy {version('numpy')}, SciPy {version('scipy')}, Matplotlib {version('matplotlib')}, seaborn {version('seaborn')}.")
     a("")
     a("### Output index")
     a("")
     a("| Item | Location |\n|:--|:--|\n| Inspection report | `outputs/inspection_report.md` |\n| Preprocessing summary | `outputs/preprocessing_summary.md` |\n| EDA figure interpretations | `outputs/figure_interpretations.md` |\n"
-      "| CDA report / JSON results | `outputs/statistical_results/04_cda_report.md`, `04_cda_results.json` |\n| Summary tables | `outputs/tables/*.csv` |\n| Figures | `outputs/figures/fig01..fig07*.png` |\n| Processed data | `data/processed/collisions_2025_processed.csv` |")
+      "| CDA report / JSON results | `outputs/statistical_results/04_cda_report.md`, `04_cda_results.json` |\n| Optional technical documentation (advanced methods) | `outputs/technical/04_advanced_methods.md` |\n| Summary tables | `outputs/tables/*.csv` |\n| Figures | `outputs/figures/fig01..fig07*.png` |\n| Processed data | `data/processed/collisions_2025_processed.csv` |")
     (OUT_DIR / "analysis_summary.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print(f"analysis_summary.md written ({len(L)} lines)")
 

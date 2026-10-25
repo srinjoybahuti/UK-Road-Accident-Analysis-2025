@@ -19,12 +19,13 @@ DA_IA3_PROJECT/
 │   ├── 01_inspection.py   inspect raw CSV + guide (schema, dtypes, codes, coverage)
 │   ├── 02_preprocessing.py  cleaning, labelling, derived variables, processed dataset
 │   ├── 03_eda.py          descriptive statistics, tables, figures 1-6, interpretations
-│   ├── 04_cda.py          chi-square test, Cramér's V, Wilson CIs, robustness, figure 7
+│   ├── 04_cda.py          chi-square test, p-value, df, Cramér's V, figure 7; also writes the optional technical document
 │   └── 05_summary.py      assembles outputs/analysis_summary.md from the results above
 ├── outputs/
 │   ├── figures/             fig01 ... fig07 (PNG, 300 dpi)
 │   ├── tables/              numerical summary tables (CSV)
-│   ├── statistical_results/ JSON results + CDA report
+│   ├── statistical_results/ JSON results + CDA report (simple)
+│   ├── technical/           optional advanced methods (04_advanced_methods.md)
 │   ├── inspection_report.md, preprocessing_summary.md, figure_interpretations.md
 │   └── analysis_summary.md  <- fact base for the written report
 ├── reports/        (empty; reserved for the written report)
@@ -52,7 +53,7 @@ From the project root:
 .\.venv\Scripts\python.exe run_all.py
 ```
 
-This runs steps 01-05 in order (about 20 seconds), regenerating the processed data, all tables, figures, statistical results and `outputs/analysis_summary.md`. Each step can also be run on its own, e.g. `.\.venv\Scripts\python.exe src\04_cda.py` (steps 02-05 need the outputs of the earlier steps). Paths are resolved relative to the project folder, so the scripts work from any current directory. Random components (bootstrap CIs, Monte Carlo p-value) use a fixed seed.
+This runs steps 01-05 in order (about 20 seconds), regenerating the processed data, all tables, figures, statistical results and `outputs/analysis_summary.md`. Each step can also be run on its own, e.g. `.\.venv\Scripts\python.exe src\04_cda.py` (steps 02-05 need the outputs of the earlier steps). Paths are resolved relative to the project folder, so the scripts work from any current directory. Random components of the optional advanced methods (bootstrap, Monte Carlo) use a fixed seed, so reruns give identical output.
 
 Input files are detected by extension: exactly one `*.csv` in `data/raw/` and one `*.xlsx` in `data/reference/` are expected.
 
@@ -60,7 +61,8 @@ Input files are detected by extension: exactly one `*.csv` in `data/raw/` and on
 
 - **Preprocessing:** duplicate and ID checks; guide-based code validation and code-to-label mapping (labels are read from the guide, not retyped); `-1` ("missing/out of range") handled per column after distinguishing structural from genuine missingness; date/time parsing; derived month/weekday/hour/period/KSI/dark variables; outliers inspected and kept; raw file hash verified unchanged. No rows are deleted.
 - **EDA:** descriptive statistics, frequency tables, severity/lighting/weather/time/road analyses, 6 figures.
-- **CDA:** chi-square test of independence on lighting (5 categories) x severity (3), with assumption checks, expected counts, adjusted residuals, Cramér's V (bootstrap CI), Wilson CIs, risk ratios, and one stratified robustness check (urban/rural; police attendance).
+- **CDA:** chi-square test of independence on lighting (5 categories) x severity (3), with expected counts, the chi-square statistic, df, p-value and Cramér's V, explained using simple percentages by lighting category.
+- **Optional advanced methods** (bootstrap CI for V, Wilson CIs, risk ratios, adjusted residuals, Monte Carlo p-values, stratified robustness checks) are still computed and saved, but documented separately in `outputs/technical/04_advanced_methods.md` and `outputs/tables/04_*.csv`; they are not needed for the report.
 
 ## Interpretation notes
 

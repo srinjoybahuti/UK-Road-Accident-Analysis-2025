@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from common import (ACCENT, LIGHT_ORDER, NEUTRAL, SEVERITY_ORDER, STAT_DIR, TAB_DIR, cohen_v_label,
+from common import (ACCENT, OUT_DIR, LIGHT_ORDER, NEUTRAL, SEVERITY_ORDER, STAT_DIR, TAB_DIR, cohen_v_label,
                     cramers_v, fmt_p, load_processed, save_fig, save_json, set_plot_style, wilson_ci)
 
 
@@ -21,6 +21,7 @@ def wrap(s, w=22):
     return "\n".join(textwrap.wrap(s, w))
 
 
+TECH_DIR = OUT_DIR / "technical"
 ALPHA = 0.05
 SEED = 20250101
 N_BOOT = 5000
@@ -211,54 +212,85 @@ def main() -> None:
                        + ("; in every stratum 'no lighting' has the highest Fatal/Serious share. " if no_light_top else ". ")
                        + "The association is therefore not simply an artefact of mixing urban/rural roads or police-attended and unattended reports, although the strata do not rule out other confounders (e.g. speed limit, road type, time of day)."),
     }
-    out["interpretation"] = interp
+    out["interpretation_advanced"] = interp
+    fat_ratio = nl["Fatal_pct"] / day["Fatal_pct"]
+    simple = {
+        "decision": interp["decision"],
+        "practical": (f"The association is very weak: Cramér's V = {res['v']:.3f} ({v_label}). With n = {res['n']:,} even tiny differences are statistically significant, "
+                      f"so the size of the difference matters more than the p-value. Most collisions occur in daylight or lit darkness, where the severity mix is close to the overall mix; "
+                      f"the 'no lighting' group is only {nl_share:.1f}% of collisions but accounts for {nl_contrib:.1f}% of the chi-square statistic."),
+        "pattern": (f"The difference comes mainly from darkness with no street lighting: {nl['KSI (Fatal+Serious)_pct']:.1f}% of these collisions were Fatal or Serious, "
+                    f"against {day['KSI (Fatal+Serious)_pct']:.1f}% in daylight, and {nl['Fatal_pct']:.1f}% were Fatal against {day['Fatal_pct']:.1f}% in daylight "
+                    f"(about {fat_ratio:.1f} times as high). Other lighting groups are close to the overall {out['ksi_overall_pct']:.1f}%."),
+    }
+    out["interpretation"] = simple
     save_json(out, STAT_DIR / "04_cda_results.json")
 
-    # ------------------------------------------------ markdown report
+    # ------------------------------------------------ markdown report (report-facing: simple)
+    pct_tab = prop[["lighting", "n", "Fatal_pct", "Serious_pct", "Slight_pct", "KSI (Fatal+Serious)_pct"]].rename(
+        columns={"Fatal_pct": "Fatal %", "Serious_pct": "Serious %", "Slight_pct": "Slight %", "KSI (Fatal+Serious)_pct": "Fatal or Serious %"}).round(1)
     lines = [
         "# Confirmatory data analysis - lighting conditions vs collision severity", "",
         f"**Research question.** {out['research_question']}", "",
         f"- H0: {out['H0']}", f"- H1: {out['H1']}", f"- Significance level: alpha = {ALPHA}", f"- Test: {out['test']}", "",
         "## Data", "",
-        f"{n_all:,} collisions in the processed file; {n_excl} with missing lighting (`-1`) were excluded (complete-case analysis), leaving **n = {res['n']:,}**. "
-        "'Darkness - lighting unknown' is a valid guide code and was retained as its own category.", "",
-        "## Test selection and assumptions", "",
-        "Both variables are categorical (lighting nominal with 5 categories; severity ordinal with 3 categories), so Pearson's chi-square test of independence is appropriate. Checks:", "",
-        "1. **Categories mutually exclusive and exhaustive** - each collision has exactly one lighting code and one severity code (verified: no duplicate collision IDs; see preprocessing summary).",
-        f"2. **Sufficient expected counts** - minimum expected count = {res['min_expected']:.2f}; cells with expected < 5: {res['pct_cells_lt5']:.1f}%; cells with expected < 1: {res['cells_lt1']}. "
-        + ("The usual rule (>= 80% of cells >= 5, none < 1) is met, so the asymptotic chi-square distribution is valid and no category merging or exact test is needed." if res['pct_cells_lt5'] <= 20 and res['cells_lt1'] == 0 else "The usual rule is NOT met."),
-        "3. **Independence of observations** - each row is a separate reported collision, but collisions are not strictly independent draws (they cluster in space and time, e.g. a single event or weather system can generate several). This cannot be tested from the data and is a limitation: the nominal p-value is probably somewhat optimistic. With a p-value this far below alpha the decision is not sensitive to that.",
-        "4. **Random sampling** - the data are a census of police-reported injury collisions, not a random sample; inference is therefore about association in the 2025 reported data, not generalisation to unreported collisions.", "",
-        "An ordinal trend test (e.g. Cochran-Armitage) was not used because lighting has no natural single ordering across all five categories.", "",
+        f"{n_all:,} collisions in the processed file; {n_excl} with missing lighting (`-1`) were excluded, leaving **n = {res['n']:,}**. "
+        "'Darkness - lighting unknown' is a valid guide code and was kept as its own category.", "",
+        "## Why a chi-square test", "",
+        "Both variables are categorical (lighting: 5 categories; severity: 3 categories), so the chi-square test of independence is appropriate. "
+        f"Its main requirement - enough expected counts in every cell - is met (smallest expected count = {res['min_expected']:.2f}; {res['pct_cells_lt5']:.0f}% of cells below 5). "
+        "Collisions are not strictly independent (they cluster in space and time) and the data are a census of reported collisions, not a random sample, so results describe the 2025 reported data only.", "",
         "## Observed frequencies", "", obs.assign(Total=obs.sum(axis=1)).to_markdown(), "",
         "## Expected frequencies under H0", "", res["expected"].round(1).to_markdown(), "",
-        "## Adjusted standardised residuals (|value| > 1.96 indicates a cell departing from independence)", "", res["adj_resid"].round(2).to_markdown(), "",
         "## Test result", "",
         f"- chi-square statistic = **{res['chi2']:,.2f}**", f"- degrees of freedom = **{res['dof']}** ((5-1) x (3-1))",
-        f"- p-value = **{fmt_p(res['p'])}** (log10 p = {res['log10_p']:.1f})", f"- decision at alpha = {ALPHA}: **{out['decision']}**", "",
-        "## Effect size", "",
-        f"- Cramér's V = **{res['v']:.4f}** (95% bootstrap CI {v_lo:.4f}-{v_hi:.4f}, {N_BOOT:,} resamples, seed {SEED}); bias-corrected V = {res['v_bias_corrected']:.4f}",
-        f"- Benchmarks for df* = {res['df_star']}: small = {cut[0]:.3f}, medium = {cut[1]:.3f}, large = {cut[2]:.3f} -> **{v_label}**", "",
-        "## Severity proportions with 95% Wilson confidence intervals", "",
+        f"- p-value = **{fmt_p(res['p'])}**", f"- decision at alpha = {ALPHA}: **{out['decision']}**",
+        f"- Cramér's V = **{res['v']:.3f}** ({v_label})", "",
+        "## Severity by lighting (percentages)", "", pct_tab.to_markdown(index=False), "",
+        "## Interpretation", "",
+        f"- **Statistical significance.** {simple['decision']}", f"- **Practical significance.** {simple['practical']}", f"- **Pattern.** {simple['pattern']}", "",
+        "## Limitations", "",
+        "- Association, not causation: lighting is related to time of day, season, road type, speed limit and rural/urban location, which were not adjusted for.",
+        "- Reported collisions only, with no traffic exposure data: the results show how severity is distributed among reported collisions, not that darkness increases risk.",
+        "- Severity is recorded under two systems (injury-based vs officer-reported), police attendance varies, and lighting is an officer's judgement.",
+        "- Collisions are not strictly independent observations.", "",
+        "Optional advanced methods (bootstrap CI, Wilson CIs, risk ratios, residuals, stratified robustness checks): `outputs/technical/04_advanced_methods.md`.",
+    ]
+    (STAT_DIR / "04_cda_report.md").write_text("\n".join(lines), encoding="utf-8")
+
+    # ------------------------------------------------ optional technical documentation (advanced methods)
+    TECH_DIR.mkdir(parents=True, exist_ok=True)
+    tech = [
+        "# Optional technical documentation - advanced methods for the lighting x severity analysis", "",
+        "Supporting material only; none of it is needed for the main report. All values are produced by `src/04_cda.py` and are the same calculations stored in `04_cda_results.json`.", "",
+        "## Chi-square assumption checks", "",
+        f"Minimum expected count = {res['min_expected']:.2f}; cells with expected < 5: {res['pct_cells_lt5']:.1f}%; cells with expected < 1: {res['cells_lt1']}. "
+        + ("The usual rule (>= 80% of cells >= 5, none < 1) is met." if res['pct_cells_lt5'] <= 20 and res['cells_lt1'] == 0 else "The usual rule is NOT met."),
+        "An ordinal trend test (e.g. Cochran-Armitage) was not used because lighting has no natural single ordering across all five categories.", "",
+        "## Effect size detail", "",
+        f"- Cramér's V = {res['v']:.4f}; 95% percentile bootstrap CI {v_lo:.4f}-{v_hi:.4f} ({N_BOOT:,} multinomial resamples, seed {SEED}); bias-corrected V = {res['v_bias_corrected']:.4f}; V^2 = {res['v'] ** 2:.4f}",
+        f"- Cohen benchmarks for df* = {res['df_star']}: small = {cut[0]:.3f}, medium = {cut[1]:.3f}, large = {cut[2]:.3f} -> **{v_label}**", "",
+        "## Adjusted standardised residuals (|value| > 1.96 indicates a cell departing from independence)", "", res["adj_resid"].round(2).to_markdown(), "",
+        f"{interp['pattern']}", "",
+        "## Severity proportions with 95% Wilson confidence intervals and risk ratios", "",
         prop[["lighting", "n", "Fatal_pct", "Fatal_ci_low", "Fatal_ci_high", "KSI (Fatal+Serious)_pct", "KSI (Fatal+Serious)_ci_low", "KSI (Fatal+Serious)_ci_high",
-              "KSI_RR_vs_daylight", "KSI_RR_ci_low", "KSI_RR_ci_high", "Fatal_RR_vs_daylight", "Fatal_RR_ci_low", "Fatal_RR_ci_high"]].round(2).to_markdown(index=False), "",
+              "KSI_RR_vs_daylight", "KSI_RR_ci_low", "KSI_RR_ci_high", "Fatal_RR_vs_daylight", "Fatal_RR_ci_low", "Fatal_RR_ci_high"]].round(2).to_markdown(index=False, missingval="-"), "",
         "Risk ratios compare each category with Daylight (Katz log-method CI). Fatal outcomes are rare (1.4% overall), so Fatal intervals are wide in small categories (e.g. 'lights unlit', n = 720).", "",
         "## Robustness: the same test within strata", "",
-        "One focused sensitivity analysis, reported in full (all four tests, none omitted). Urban/rural area and police attendance were chosen because the exploratory analysis (Figures 5-6) showed that rural roads are over-represented in unlit darkness and that "
-        "police-attended collisions are more often Serious/Fatal and have a different lighting mix - i.e. they are plausible confounders/reporting effects; the choice was made after the EDA, not pre-registered. "
-        "These four tests are consistency checks, not additional hypotheses. Where the chi-square expected-count rule fails (> 20% of cells < 5, or any < 1), a Monte Carlo permutation p-value (10,000 shuffles of severity within fixed margins) is used instead.", "",
+        "Urban/rural area and police attendance were chosen after the EDA because rural roads are over-represented in unlit darkness and police-attended collisions have a different severity and lighting mix; "
+        "the choice was not pre-registered. These four tests are consistency checks, not additional hypotheses. Where the chi-square expected-count rule fails (> 20% of cells < 5, or any < 1), "
+        "a Monte Carlo permutation p-value (10,000 shuffles of severity within fixed margins) is used instead.", "",
         strata[["stratifier", "stratum", "n", "chi2", "dof", "p_used_text", "cramers_v", "v_ci_low", "v_ci_high", "effect_size", "min_expected", "pct_cells_expected_lt5", "chi2_assumptions_met"]].round(4).to_markdown(index=False), "",
         "KSI share by lighting within each stratum:", "",
         strata[["stratum"] + [f"KSI%_{l}" for l in LIGHT_ORDER]].round(1).to_markdown(index=False), "",
-        "## Interpretation", "",
-        f"- **Statistical significance.** {interp['decision']}", f"- **Practical significance.** {interp['practical']}", f"- **Pattern.** {interp['pattern']}", f"- **Robustness.** {interp['robustness']}", "",
-        "## Limitations", "",
-        "- Association, not causation: lighting is correlated with time of day, season, road type, speed limit and rurality, and we have not adjusted for these.",
-        "- The data are reported collisions only; without exposure (traffic by lighting condition) the results cannot show that darkness *increases* risk, only how severity is distributed among collisions that were reported.",
-        "- Severity is recorded under two systems (injury-based vs. officer-reported), and police attendance varies; lighting is an officer's judgement.",
-        "- Observations are not strictly independent (see assumption 3).",
+        f"{interp['robustness']}", "",
+        "## References for the advanced methods", "",
+        "- Wilson, E. B. (1927). Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association*, 22(158), 209-212.",
+        "- Katz, D., Baptista, J., Azen, S. P., & Pike, M. C. (1978). Obtaining confidence intervals for the risk ratio in cohort studies. *Biometrics*, 34(3), 469-474.",
+        "- Bergsma, W. (2013). A bias-correction for Cramér's V and Tschuprow's T. *Journal of the Korean Statistical Society*, 42(3), 323-328.",
+        "- Agresti, A. (2013). *Categorical Data Analysis* (3rd ed.). Wiley.",
     ]
-    (STAT_DIR / "04_cda_report.md").write_text("\n".join(lines), encoding="utf-8")
+    (TECH_DIR / "04_advanced_methods.md").write_text("\n".join(tech), encoding="utf-8")
     print(f"CDA: chi2({res['dof']}) = {res['chi2']:.2f}, p = {fmt_p(res['p'])}, V = {res['v']:.4f} [{v_lo:.4f}, {v_hi:.4f}] ({v_label}); decision: {out['decision']}")
 
 

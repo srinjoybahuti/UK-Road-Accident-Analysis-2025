@@ -306,10 +306,15 @@
       "KSI%_Darkness - lighting unknown": 15.54126
     }
   ],
-  "interpretation": {
+  "interpretation_advanced": {
     "decision": "Because p = 5.934e-142 is below alpha = 0.05, H0 is rejected: the data show a statistically significant association between lighting condition and collision severity.",
     "practical": "With n = 101,509 even small departures from independence are detectable, so significance alone is uninformative. Cram\u00e9r's V = 0.058 (95% bootstrap CI 0.052-0.065; bias-corrected 0.058) is negligible by Cohen's benchmarks for df* = 2 (small 0.07, medium 0.21, large 0.35); V^2 = 0.0034, i.e. a very weak overall association. The overall effect is small because most collisions occur in daylight or lit darkness, where severity is close to the overall mix; the 'no lighting' row (only 5.6% of collisions) supplies 89.6% of the chi-square statistic.",
     "pattern": "The association is concentrated in darkness with no street lighting: Fatal or Serious share 36.3% (95% CI 35.0-37.5) vs 25.3% in daylight (risk ratio 1.43, 95% CI 1.38-1.49); Fatal share 4.7% vs 1.2% (RR 3.89, 95% CI 3.40-4.45). Cells with the largest adjusted residuals: Darkness - no lighting x Fatal (+21.5); Darkness - no lighting x Slight (-17.7); Darkness - no lighting x Serious (+12.1); Daylight x Slight (+10.5).",
     "robustness": "Stratified re-analysis (Urban: chi2(8) = 144.8, p 2.411e-27, V = 0.033; Rural: chi2(8) = 213.4, p 9.721e-42, V = 0.056; Police attended: chi2(8) = 317.3, p 8.699e-64, V = 0.047; No police attendance (incl. self-completion forms): chi2(8) = 77.5, p 0.0002 (Monte Carlo), V = 0.036). The association remains significant in every stratum; in every stratum 'no lighting' has the highest Fatal/Serious share. The association is therefore not simply an artefact of mixing urban/rural roads or police-attended and unattended reports, although the strata do not rule out other confounders (e.g. speed limit, road type, time of day)."
+  },
+  "interpretation": {
+    "decision": "Because p = 5.934e-142 is below alpha = 0.05, H0 is rejected: the data show a statistically significant association between lighting condition and collision severity.",
+    "practical": "The association is very weak: Cram\u00e9r's V = 0.058 (negligible). With n = 101,509 even tiny differences are statistically significant, so the size of the difference matters more than the p-value. Most collisions occur in daylight or lit darkness, where the severity mix is close to the overall mix; the 'no lighting' group is only 5.6% of collisions but accounts for 89.6% of the chi-square statistic.",
+    "pattern": "The difference comes mainly from darkness with no street lighting: 36.3% of these collisions were Fatal or Serious, against 25.3% in daylight, and 4.7% were Fatal against 1.2% in daylight (about 3.9 times as high). Other lighting groups are close to the overall 26.2%."
   }
 }
